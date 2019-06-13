@@ -42,7 +42,8 @@ public class CampanhaControllerTest extends BaseControllerTest {
 				.andExpect(jsonPath("$.idTimeDoCoracao")
 						.value(createCampanhaCommand.getIdTimeDoCoracao()))
 				.andExpect(jsonPath("$.dataFimVigencia")
-						.value(createCampanhaCommand.getDataFimVigencia().toString()));
+						.value(createCampanhaCommand.getDataFimVigencia().toString()))
+				.andExpect(jsonPath("$.id").doesNotExist());
 
 	}
 
