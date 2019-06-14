@@ -1,18 +1,24 @@
 package com.vas.desafioseniorcampanhas.controllers;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
 import com.vas.desafioseniorcampanhas.services.CampanhaService;
@@ -45,6 +51,29 @@ public class CampanhaControllerTest extends BaseControllerTest {
 						.value(createCampanhaCommand.getDataFimVigencia().toString()))
 				.andExpect(jsonPath("$.id").doesNotExist());
 
+	}
+
+	@Test
+	public void get_campanhas_shouldReturnOkAndCampanhasJsonArray() throws Exception {
+		List<CampanhaDTO> campanhas = new ArrayList<>();
+		campanhas.add(new CampanhaDTO("24e235v4rwe", "Teste1", 1, LocalDate.now().plusDays(30)));
+		campanhas.add(new CampanhaDTO("fsvrwrwe", "Teste2", 2, LocalDate.now().plusDays(20)));
+		campanhas.add(new CampanhaDTO("wb534tb4", "Teste3", 1, LocalDate.now().plusDays(35)));
+		campanhas.add(new CampanhaDTO("vvrwrv", "Teste4", 3, LocalDate.now().plusDays(22)));
+
+		when(campanhaService.findAllVigentes()).thenReturn(campanhas);
+
+		MvcResult result = mockMvc.perform(get("/campanhas")).andExpect(status().isOk())
+				.andReturn();
+		List<CampanhaDTO> campanhasResponse = objectMapper
+				.readValue(result.getResponse().getContentAsString(),
+						new TypeReference<List<CampanhaDTO>>() {
+						});
+		assertEquals(campanhas.size(), campanhasResponse.size());
+		assertEquals(campanhas.get(0).getNome(), campanhasResponse.get(0).getNome());
+		assertEquals(campanhas.get(1).getNome(), campanhasResponse.get(1).getNome());
+		assertEquals(campanhas.get(2).getNome(), campanhasResponse.get(2).getNome());
+		assertEquals(campanhas.get(3).getNome(), campanhasResponse.get(3).getNome());
 	}
 
 }
