@@ -33,8 +33,7 @@ public class CampanhaService {
 	}
 
 	public CampanhaDTO update(UpdateCampanhaCommand command) {
-		Campanha existingCampanha = campanhaRepository.findById(command.getId()).orElseThrow(
-				() -> new GenericBadRequestException("Não há campanha com o id informado"));
+		Campanha existingCampanha = findById(command.getId());
 		if (command.getDataFimVigencia() != null)
 			existingCampanha.setDataFimVigencia(command.getDataFimVigencia());
 		if (command.getNome() != null)
@@ -55,6 +54,16 @@ public class CampanhaService {
 
 	public List<Campanha> findByVigencia(LocalDate vigencia) {
 		return campanhaRepository.findByVigencia(vigencia);
+	}
+
+	public void deleteById(String idCampanha) {
+		Campanha existingCampanha = findById(idCampanha);
+		campanhaRepository.delete(existingCampanha);
+	}
+
+	public Campanha findById(String idCampanha) {
+		return campanhaRepository.findById(idCampanha).orElseThrow(
+				() -> new GenericBadRequestException("Não há campanha com o id informado"));
 	}
 
 }

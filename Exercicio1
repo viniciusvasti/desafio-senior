@@ -3,11 +3,6 @@
 Eu, como usuário, quero administrar os dados da Campanha e fornecer mecanismos (APIs) para
 INCLUIR, CONSULTAR, ATUALIZAR, DELETAR as campanhas. Para tanto, os critérios de aceite dessa
 história são:
-- As campanhas deverão ser cadastradas de forma que o serviço retorne essas campanhas
-  seguindo a estrutura abaixo:
-    - Nome Da Campanha;
-    - ID do Time do Coração;
-    - Data de Vigência;
 - O Sistema não deverá retornar campanhas que estão com a data de vigência vencidas;
 - No cadastramento de uma nova campanha, deve-se verificar se já existe uma campanha ativa
   para aquele período (vigência), caso exista uma campanha ou N campanhas naquele período,
@@ -26,7 +21,6 @@ história são:
 			   - Campanha 1: 01/10/2017 a 05/10/2017
 			 - Incluindo campanha 3 : 01/10/2017 a 03/10/2017
 
-- As campanhas deveram ser controladas por um ID único;
 - No caso de uma alteração nas campanhas já existentes, o sistema deverá ser capaz de fornecer recursos
   para avisar outros sistemas que houve alteração nas campanhas existentes;
 - Neste exercício, deve-se contemplar a API que faz a associação entre o Cliente e as

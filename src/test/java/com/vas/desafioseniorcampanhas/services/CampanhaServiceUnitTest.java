@@ -21,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.commands.UpdateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
+import com.vas.desafioseniorcampanhas.exceptions.GenericBadRequestException;
 import com.vas.desafioseniorcampanhas.models.Campanha;
 import com.vas.desafioseniorcampanhas.repositories.CampanhaRepository;
 
@@ -34,7 +35,7 @@ public class CampanhaServiceUnitTest {
 	private CampanhaService campanhaService;
 	
 	@Test
-	public void create_campanha_shouldReturnNovaCampanha() {
+	public void create_campanha_shouldCreateAndReturnNovaCampanha() {
 		LocalDate vigencia = LocalDate.now().plusDays(30);
 		CreateCampanhaCommand createCampanhaCommand = new CreateCampanhaCommand("Teste", 1,
 				vigencia);
@@ -50,7 +51,32 @@ public class CampanhaServiceUnitTest {
 	}
 
 	@Test
-	public void update_campanha_shouldReturnUpdatedCampanha() {
+	public void findById_Id_shouldReturnCampanha() {
+		String idCampanha = "d4234as54das";
+		Campanha campanha = new Campanha(idCampanha, "Teste", 1, LocalDate.now());
+
+		when(campanhaRepository.findById(any(String.class)))
+				.thenReturn(Optional.of(campanha));
+
+		Campanha foundCampanha = campanhaService.findById(idCampanha);
+		assertEquals(campanha.getId(), foundCampanha.getId());
+		assertEquals(campanha.getNome(), foundCampanha.getNome());
+		assertEquals(campanha.getIdTimeDoCoracao(), foundCampanha.getIdTimeDoCoracao());
+		assertEquals(campanha.getDataFimVigencia(), foundCampanha.getDataFimVigencia());
+	}
+
+	@Test(expected = GenericBadRequestException.class)
+	public void findById_nonExistingId_shouldThrowGenericBadRequestException() {
+		String idCampanha = "d4234as54das";
+
+		when(campanhaRepository.findById(any(String.class)))
+				.thenReturn(Optional.empty());
+
+		campanhaService.findById(idCampanha);
+	}
+
+	@Test
+	public void update_campanha_shouldUpdateAndReturnUpdatedCampanha() {
 		LocalDate vigencia = LocalDate.now().plusDays(30);
 		UpdateCampanhaCommand createCampanhaCommand = new UpdateCampanhaCommand("24e235v4rwe",
 				"Teste", vigencia);
@@ -66,6 +92,18 @@ public class CampanhaServiceUnitTest {
 		assertEquals(campanhaDTO.getNome(), campanhaDTOupdated.getNome());
 		assertEquals(campanhaDTO.getIdTimeDoCoracao(), campanhaDTOupdated.getIdTimeDoCoracao());
 		assertEquals(campanhaDTO.getDataFimVigencia(), campanhaDTOupdated.getDataFimVigencia());
+	}
+
+	@Test
+	public void delete_campanha_shouldDeleteCampanha() {
+		String idCampanha = "d4234as54das";
+
+		Campanha existingCampanha = new Campanha(idCampanha, "Teste old", 1, LocalDate.now());
+
+		when(campanhaRepository.findById(any(String.class)))
+				.thenReturn(Optional.of(existingCampanha));
+
+		campanhaService.deleteById(idCampanha);
 	}
 
 	@Test
