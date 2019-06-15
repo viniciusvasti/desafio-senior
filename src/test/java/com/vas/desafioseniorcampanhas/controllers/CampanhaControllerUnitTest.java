@@ -27,7 +27,7 @@ import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
 import com.vas.desafioseniorcampanhas.services.CampanhaService;
 
 @WebMvcTest(CampanhaController.class)
-public class CampanhaControllerTest extends BaseControllerTest {
+public class CampanhaControllerUnitTest extends BaseControllerTest {
 
 	@MockBean
 	private CampanhaService campanhaService;
