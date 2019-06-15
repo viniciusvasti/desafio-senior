@@ -6,7 +6,6 @@
 package com.vas.desafioseniorcampanhas.controllers;
 
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,6 +23,5 @@ public abstract class BaseControllerTest {
 	protected MockMvc mockMvc;
 	@Autowired
 	protected ObjectMapper objectMapper;
-	protected ModelMapper modelMapper = new ModelMapper();
 
 }

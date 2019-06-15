@@ -27,7 +27,7 @@ história são:
 			 - Incluindo campanha 3 : 01/10/2017 a 03/10/2017
 
 - As campanhas deveram ser controladas por um ID único;
-- No caso de uma nas campanhas já existentes, o sistema deverá ser capaz de fornecer recursos
+- No caso de uma alteração nas campanhas já existentes, o sistema deverá ser capaz de fornecer recursos
   para avisar outros sistemas que houve alteração nas campanhas existentes;
 - Neste exercício, deve-se contemplar a API que faz a associação entre o Cliente e as
   Campanhas. Essa API é utilizada pelo próximo exercício. O Candidato deve analisar a melhor

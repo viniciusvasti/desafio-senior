@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,8 +19,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
+import com.vas.desafioseniorcampanhas.commands.UpdateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
 import com.vas.desafioseniorcampanhas.services.CampanhaService;
 
@@ -49,8 +52,28 @@ public class CampanhaControllerTest extends BaseControllerTest {
 						.value(createCampanhaCommand.getIdTimeDoCoracao()))
 				.andExpect(jsonPath("$.dataFimVigencia")
 						.value(createCampanhaCommand.getDataFimVigencia().toString()))
-				.andExpect(jsonPath("$.id").doesNotExist());
+				.andExpect(jsonPath("$.id").exists());
 
+	}
+
+	@Test
+	public void update_campanha_shouldReturnOkAndCampanhaJson()
+			throws JsonProcessingException, Exception {
+		UpdateCampanhaCommand updateCampanhaCommand = new UpdateCampanhaCommand("24e235v4rwe",
+				"Teste", LocalDate.now().plusDays(30));
+		CampanhaDTO campanhaDTO = new CampanhaDTO("24e235v4rwe", "Teste", 1,
+				LocalDate.now().plusDays(30));
+
+		when(campanhaService.update(any(UpdateCampanhaCommand.class))).thenReturn(campanhaDTO);
+
+		mockMvc.perform(put("/campanhas")
+				.content(objectMapper.writeValueAsString(updateCampanhaCommand))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.nome").value(updateCampanhaCommand.getNome()))
+				.andExpect(jsonPath("$.dataFimVigencia")
+						.value(updateCampanhaCommand.getDataFimVigencia().toString()))
+				.andExpect(jsonPath("$.id").value(campanhaDTO.getId()));
 	}
 
 	@Test
