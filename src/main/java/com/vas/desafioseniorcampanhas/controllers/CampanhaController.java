@@ -3,9 +3,10 @@ package com.vas.desafioseniorcampanhas.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,18 +36,23 @@ public class CampanhaController {
 		return ResponseEntity.created(location).body(dto);
 	}
 
-	@PutMapping
-	public ResponseEntity<CampanhaDTO> put(@RequestBody UpdateCampanhaCommand command) {
-		CampanhaDTO dto = campanhaService.update(command);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(dto.getId()).toUri();
-		return ResponseEntity.created(location).body(dto);
+	@GetMapping
+	public ResponseEntity<List<CampanhaDTO>> getVigentes() {
+		return ResponseEntity.ok(campanhaService.findAllVigentes());
 	}
 
-	@GetMapping
-	public ResponseEntity<List<CampanhaDTO>> get() {
-		return new ResponseEntity<>(campanhaService.findAllVigentes(),
-				HttpStatus.OK);
+	@PutMapping("/{id}")
+	public ResponseEntity<CampanhaDTO> put(@PathVariable String id,
+			@RequestBody UpdateCampanhaCommand command) {
+		command.setId(id);
+		CampanhaDTO dto = campanhaService.update(command);
+		return ResponseEntity.ok(dto);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> delete(@PathVariable String id) {
+		campanhaService.deleteById(id);
+		return ResponseEntity.ok("Campanha excluída com sucesso.");
 	}
 
 }

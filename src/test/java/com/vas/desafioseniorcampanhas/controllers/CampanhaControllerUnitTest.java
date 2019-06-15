@@ -3,6 +3,7 @@ package com.vas.desafioseniorcampanhas.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -66,10 +67,10 @@ public class CampanhaControllerUnitTest extends BaseControllerTest {
 
 		when(campanhaService.update(any(UpdateCampanhaCommand.class))).thenReturn(campanhaDTO);
 
-		mockMvc.perform(put("/campanhas")
+		mockMvc.perform(put("/campanhas/" + updateCampanhaCommand.getId())
 				.content(objectMapper.writeValueAsString(updateCampanhaCommand))
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isCreated())
+				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.nome").value(updateCampanhaCommand.getNome()))
 				.andExpect(jsonPath("$.dataFimVigencia")
 						.value(updateCampanhaCommand.getDataFimVigencia().toString()))
@@ -77,7 +78,7 @@ public class CampanhaControllerUnitTest extends BaseControllerTest {
 	}
 
 	@Test
-	public void get_campanhas_shouldReturnOkAndCampanhasJsonArray() throws Exception {
+	public void getVigentes_campanhas_shouldReturnOkAndCampanhasJsonArray() throws Exception {
 		List<CampanhaDTO> campanhas = new ArrayList<>();
 		campanhas.add(new CampanhaDTO("24e235v4rwe", "Teste1", 1, LocalDate.now().plusDays(30)));
 		campanhas.add(new CampanhaDTO("fsvrwrwe", "Teste2", 2, LocalDate.now().plusDays(20)));
@@ -97,6 +98,13 @@ public class CampanhaControllerUnitTest extends BaseControllerTest {
 		assertEquals(campanhas.get(1).getNome(), campanhasResponse.get(1).getNome());
 		assertEquals(campanhas.get(2).getNome(), campanhasResponse.get(2).getNome());
 		assertEquals(campanhas.get(3).getNome(), campanhasResponse.get(3).getNome());
+	}
+
+	@Test
+	public void delete_campanhas_shouldReturnOk() throws Exception {
+		String idCampanha = "rwerv7ewr76";
+
+		mockMvc.perform(delete("/campanhas/" + idCampanha)).andExpect(status().isOk());
 	}
 
 }
