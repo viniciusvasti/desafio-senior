@@ -11,6 +11,8 @@ import com.vas.desafioseniorcampanhas.models.Campanha;
 @Repository
 public interface CampanhaRepository extends CrudRepository<Campanha, String> {
 
-	List<Campanha> findByVigencia(LocalDate any);
+	List<Campanha> findByDataFimVigencia(LocalDate dataFimVigencia);
+
+	List<Campanha> findByDataFimVigenciaGreaterThanEqual(LocalDate dataFimVigencia);
 
 }

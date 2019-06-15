@@ -51,6 +51,22 @@ public class CampanhaServiceUnitTest {
 	}
 
 	@Test
+	public void create_campanhaWithConflictOfVigencia_shouldCreateAndReturnNovaCampanha() {
+		LocalDate vigencia = LocalDate.now().plusDays(30);
+		CreateCampanhaCommand createCampanhaCommand = new CreateCampanhaCommand("Teste", 1,
+				vigencia);
+		CampanhaDTO campanhaDTO = new CampanhaDTO("24e235v4rwe", "Teste", 1, vigencia);
+		Campanha campanha = new Campanha("24e235v4rwe", "Teste", 1, vigencia);
+
+		when(campanhaRepository.save(any(Campanha.class))).thenReturn(campanha);
+
+		CampanhaDTO campanhaDTOcreated = campanhaService.create(createCampanhaCommand);
+		assertEquals(campanhaDTO.getNome(), campanhaDTOcreated.getNome());
+		assertEquals(campanhaDTO.getIdTimeDoCoracao(), campanhaDTOcreated.getIdTimeDoCoracao());
+		assertEquals(campanhaDTO.getDataFimVigencia(), campanhaDTOcreated.getDataFimVigencia());
+	}
+
+	@Test
 	public void findById_Id_shouldReturnCampanha() {
 		String idCampanha = "d4234as54das";
 		Campanha campanha = new Campanha(idCampanha, "Teste", 1, LocalDate.now());
@@ -73,6 +89,20 @@ public class CampanhaServiceUnitTest {
 				.thenReturn(Optional.empty());
 
 		campanhaService.findById(idCampanha);
+	}
+
+	@Test
+	public void findAllVigentes_shouldReturnOnlyVigentes() {
+		List<Campanha> campanhas = new ArrayList<>();
+		campanhas.add(new Campanha("24e235v4rwe", "Teste1", 1, LocalDate.now().plusDays(30)));
+		campanhas.add(new Campanha("fsvrwrwe", "Teste2", 2, LocalDate.now().plusDays(1)));
+		campanhas.add(new Campanha("wb534tb4", "Teste3", 1, LocalDate.now().minusDays(1)));
+
+		when(campanhaRepository.findByDataFimVigenciaGreaterThanEqual(any(LocalDate.class)))
+				.thenReturn(campanhas);
+
+		List<CampanhaDTO> campanhaDTOs = campanhaService.findAllVigentes();
+		assertEquals(3, campanhaDTOs.size());
 	}
 
 	@Test
@@ -110,7 +140,7 @@ public class CampanhaServiceUnitTest {
 	public void findByVigencia_localDate_shouldReturnEmptyList() {
 		LocalDate vigencia = LocalDate.now().plusDays(30);
 
-		when(campanhaRepository.findByVigencia(any(LocalDate.class)))
+		when(campanhaRepository.findByDataFimVigencia(any(LocalDate.class)))
 				.thenReturn(Collections.emptyList());
 		
 		assertTrue(campanhaService.findByVigencia(vigencia).isEmpty());
@@ -123,7 +153,7 @@ public class CampanhaServiceUnitTest {
 		List<Campanha> campanhas = new ArrayList<>();
 		campanhas.add(new Campanha("24e235v4rwe", "Teste", 1, vigencia));
 		
-		when(campanhaRepository.findByVigencia(any(LocalDate.class)))
+		when(campanhaRepository.findByDataFimVigencia(any(LocalDate.class)))
 		.thenReturn(campanhas);
 		
 		assertFalse(campanhaService.findByVigencia(vigencia).isEmpty());
