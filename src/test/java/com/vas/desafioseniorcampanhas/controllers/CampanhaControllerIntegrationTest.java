@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vas.desafioseniorcampanhas.DesafioSeniorCampanhasApplication;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
+import com.vas.desafioseniorcampanhas.commands.UpdateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
 import com.vas.desafioseniorcampanhas.models.Campanha;
 import com.vas.desafioseniorcampanhas.repositories.CampanhaRepository;
@@ -153,6 +155,24 @@ public class CampanhaControllerIntegrationTest {
 		campanhasResponse.forEach(campanha -> {
 			assertTrue(campanha.getDataFimVigencia().compareTo(LocalDate.now()) >= 0);
 		});
+	}
+
+	@Test
+	public void update_campanha_shouldDeleteById() throws Exception {
+		campanhaRepository.deleteAll();
+		LocalDate vigenciaPlus = LocalDate.now();
+		Campanha campanha = new Campanha(null, "Teste", 1, vigenciaPlus);
+		campanha = campanhaRepository.save(campanha);
+		UpdateCampanhaCommand updateCampanhaCommand = new UpdateCampanhaCommand("24e235v4rwe",
+				"Teste2", null);
+
+		MvcResult result = mockMvc.perform(put("/campanhas/" + campanha.getId())
+				.content(objectMapper.writeValueAsString(updateCampanhaCommand))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+		CampanhaDTO updatedCampanha = objectMapper
+				.readValue(result.getResponse().getContentAsString(), CampanhaDTO.class);
+		assertEquals(updateCampanhaCommand.getNome(), updatedCampanha.getNome());
 	}
 
 	@Test

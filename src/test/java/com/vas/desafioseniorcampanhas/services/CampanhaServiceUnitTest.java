@@ -21,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.commands.UpdateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
+import com.vas.desafioseniorcampanhas.events.CampanhaCreatedEventPublisher;
 import com.vas.desafioseniorcampanhas.exceptions.GenericBadRequestException;
 import com.vas.desafioseniorcampanhas.models.Campanha;
 import com.vas.desafioseniorcampanhas.repositories.CampanhaRepository;
@@ -30,6 +31,8 @@ public class CampanhaServiceUnitTest {
 
 	@Mock
 	private CampanhaRepository campanhaRepository;
+	@Mock
+	private CampanhaCreatedEventPublisher campanhaCreatedEventPublisher;
 	
 	@InjectMocks
 	private CampanhaService campanhaService;

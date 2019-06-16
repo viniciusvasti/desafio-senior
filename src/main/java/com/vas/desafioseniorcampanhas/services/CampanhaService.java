@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.commands.UpdateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
+import com.vas.desafioseniorcampanhas.enums.CampanhaAction;
+import com.vas.desafioseniorcampanhas.events.CampanhaCreatedEventPublisher;
 import com.vas.desafioseniorcampanhas.exceptions.GenericBadRequestException;
 import com.vas.desafioseniorcampanhas.models.Campanha;
 import com.vas.desafioseniorcampanhas.repositories.CampanhaRepository;
@@ -24,21 +26,23 @@ public class CampanhaService {
 
 	@Autowired
 	private final CampanhaRepository campanhaRepository;
+	@Autowired
+	private final CampanhaCreatedEventPublisher campanhaCreatedEventPublisher;
 
 	@Transactional
 	public CampanhaDTO create(CreateCampanhaCommand command) {
 		fixVigenciasRecursively(command.getDataFimVigencia());
 		Campanha newCampanha = campanhaRepository.save(mapCreateCampanhaCommandToCampanha(command));
-		return mapCampanhaToCampanhaDTO(newCampanha);
+		CampanhaDTO campanhaDTO = mapCampanhaToCampanhaDTO(newCampanha);
+		campanhaCreatedEventPublisher.publish(campanhaDTO, CampanhaAction.CREATED);
+		return campanhaDTO;
 	}
 
 	public List<CampanhaDTO> findAllVigentes() {
 		List<CampanhaDTO> campanhaDTOs = new ArrayList<>();
 		List<Campanha> campanhaVigentes = campanhaRepository
 				.findByDataFimVigenciaGreaterThanEqual(LocalDate.now());
-		campanhaVigentes.forEach(campanha -> {
-			campanhaDTOs.add(mapCampanhaToCampanhaDTO(campanha));
-		});
+		campanhaVigentes.forEach(campanha -> campanhaDTOs.add(mapCampanhaToCampanhaDTO(campanha)));
 		return campanhaDTOs;
 	}
 
@@ -70,6 +74,8 @@ public class CampanhaService {
 
 	public void deleteById(String idCampanha) {
 		Campanha existingCampanha = findById(idCampanha);
+		CampanhaDTO campanhaDTO = mapCampanhaToCampanhaDTO(existingCampanha);
+		campanhaCreatedEventPublisher.publish(campanhaDTO, CampanhaAction.DELETED);
 		campanhaRepository.delete(existingCampanha);
 	}
 
@@ -92,8 +98,10 @@ public class CampanhaService {
 	}
 
 	private Campanha update(Campanha campanha) {
-		// TODO notify others systems about the changes
-		return campanhaRepository.save(campanha);
+		Campanha updatedCampanha = campanhaRepository.save(campanha);
+		CampanhaDTO campanhaDTO = mapCampanhaToCampanhaDTO(updatedCampanha);
+		campanhaCreatedEventPublisher.publish(campanhaDTO, CampanhaAction.UPDATED);
+		return updatedCampanha;
 	}
 
 }
