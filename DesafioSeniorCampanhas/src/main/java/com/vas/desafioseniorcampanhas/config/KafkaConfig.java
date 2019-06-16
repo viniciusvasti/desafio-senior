@@ -28,6 +28,8 @@ public class KafkaConfig {
 		config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl + ":" + kafkaPort);
 		config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+		config.put("delivery.timeout.ms", 5000);
+		config.put("max.block.ms", 5000);
 		return new DefaultKafkaProducerFactory<>(config);
 	}
 

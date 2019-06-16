@@ -21,6 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,6 +43,7 @@ import com.vas.desafioseniorcampanhas.repositories.CampanhaRepository;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = {
 		DesafioSeniorCampanhasApplication.class })
+@EmbeddedKafka
 @TestPropertySource(locations = "classpath:/application-test.properties")
 public class CampanhaControllerIntegrationTest {
 
@@ -50,10 +54,13 @@ public class CampanhaControllerIntegrationTest {
 	private CampanhaRepository campanhaRepository;
 	@Autowired
 	protected ObjectMapper objectMapper;
+	@Autowired
+	private EmbeddedKafkaBroker embeddedKafkaBroker;
 
 	@Before
 	public void setup() throws Exception {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(this.campanhaController).build();
+		KafkaTestUtils.producerProps(embeddedKafkaBroker);
 	}
 
 	@Test
