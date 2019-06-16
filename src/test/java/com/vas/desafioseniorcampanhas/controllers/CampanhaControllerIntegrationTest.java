@@ -1,7 +1,9 @@
 package com.vas.desafioseniorcampanhas.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -151,6 +153,18 @@ public class CampanhaControllerIntegrationTest {
 		campanhasResponse.forEach(campanha -> {
 			assertTrue(campanha.getDataFimVigencia().compareTo(LocalDate.now()) >= 0);
 		});
+	}
+
+	@Test
+	public void delete_idCampanha_shouldDeleteById() throws Exception {
+		campanhaRepository.deleteAll();
+		LocalDate vigenciaPlus = LocalDate.now();
+		Campanha campanha = new Campanha(null, "Teste", 1, vigenciaPlus);
+		campanha = campanhaRepository.save(campanha);
+
+		mockMvc.perform(delete("/campanhas/" + campanha.getId()))
+				.andExpect(status().isOk());
+		assertFalse(campanhaRepository.findById(campanha.getId()).isPresent());
 	}
 
 }
