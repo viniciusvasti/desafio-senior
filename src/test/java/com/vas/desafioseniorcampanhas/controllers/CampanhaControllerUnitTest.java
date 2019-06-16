@@ -15,20 +15,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.commands.UpdateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
 import com.vas.desafioseniorcampanhas.services.CampanhaService;
 
+@RunWith(SpringRunner.class)
 @WebMvcTest(CampanhaController.class)
-public class CampanhaControllerUnitTest extends BaseControllerTest {
+public class CampanhaControllerUnitTest {
+
+	@Autowired
+	protected MockMvc mockMvc;
+	@Autowired
+	protected ObjectMapper objectMapper;
 
 	@MockBean
 	private CampanhaService campanhaService;
@@ -43,7 +54,7 @@ public class CampanhaControllerUnitTest extends BaseControllerTest {
 
 		when(campanhaService.create(any(CreateCampanhaCommand.class)))
 				.thenReturn(campanhaDTO);
-		
+
 		mockMvc.perform(post("/campanhas")
 				.content(objectMapper.writeValueAsString(createCampanhaCommand))
 				.contentType(MediaType.APPLICATION_JSON))

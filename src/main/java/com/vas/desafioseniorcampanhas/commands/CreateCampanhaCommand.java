@@ -6,20 +6,26 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class CreateCampanhaCommand {
 	
 	@NotBlank
-	private final String nome;
+	private String nome;
 	@Positive
-	private final long idTimeDoCoracao;
+	private long idTimeDoCoracao;
+	@JsonSerialize(using = ToStringSerializer.class)
 	@NotNull
-	private final LocalDate dataFimVigencia;
+	private LocalDate dataFimVigencia;
 
 }

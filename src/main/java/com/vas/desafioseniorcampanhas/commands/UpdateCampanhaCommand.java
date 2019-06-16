@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +22,7 @@ public class UpdateCampanhaCommand {
 	@NotBlank
 	private String nome;
 	@NotNull
+	@JsonSerialize(using = ToStringSerializer.class)
 	private LocalDate dataFimVigencia;
 
 }
