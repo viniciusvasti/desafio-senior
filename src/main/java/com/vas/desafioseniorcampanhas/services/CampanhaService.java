@@ -44,8 +44,10 @@ public class CampanhaService {
 
 	public CampanhaDTO update(UpdateCampanhaCommand command) {
 		Campanha existingCampanha = findById(command.getId());
-		if (command.getDataFimVigencia() != null)
+		if (command.getDataFimVigencia() != null) {
 			existingCampanha.setDataFimVigencia(command.getDataFimVigencia());
+			fixVigenciasRecursively(command.getDataFimVigencia());
+		}
 		if (command.getNome() != null)
 			existingCampanha.setNome(command.getNome());
 		Campanha updatedCampanha = update(existingCampanha);

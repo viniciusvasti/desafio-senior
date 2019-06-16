@@ -2,11 +2,14 @@ package com.vas.desafioseniorcampanhas.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +21,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vas.desafioseniorcampanhas.DesafioSeniorCampanhasApplication;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
+import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
 import com.vas.desafioseniorcampanhas.models.Campanha;
 import com.vas.desafioseniorcampanhas.repositories.CampanhaRepository;
 
@@ -121,6 +127,30 @@ public class CampanhaControllerIntegrationTest {
 				vigenciaPlus30.plusDays(1));
 		assertEquals(campanhaRepository.findById(campanha2.getId()).get().getDataFimVigencia(),
 				vigenciaPlus30.plusDays(2));
+	}
+
+	@Test
+	public void getVigentes_shouldReturnOkAndOnlyCampanhasVigentes() throws Exception {
+		campanhaRepository.deleteAll();
+		List<Campanha> campanhas = new ArrayList<>();
+		campanhas.add(new Campanha(null, "Teste1", 1, LocalDate.now().plusDays(30)));
+		campanhas.add(new Campanha(null, "Teste2", 2, LocalDate.now().plusDays(20)));
+		campanhas.add(new Campanha(null, "Teste3", 1, LocalDate.now().minusDays(1)));
+		campanhas.add(new Campanha(null, "Teste4", 3, LocalDate.now()));
+		campanhas.add(new Campanha(null, "Teste5", 3, LocalDate.now().plusDays(1)));
+		campanhaRepository.saveAll(campanhas);
+
+		MvcResult result = mockMvc.perform(get("/campanhas")).andExpect(status().isOk())
+				.andReturn();
+		List<CampanhaDTO> campanhasResponse = objectMapper
+				.readValue(result.getResponse().getContentAsString(),
+						new TypeReference<List<CampanhaDTO>>() {
+						});
+
+		assertEquals(4, campanhasResponse.size());
+		campanhasResponse.forEach(campanha -> {
+			assertTrue(campanha.getDataFimVigencia().compareTo(LocalDate.now()) >= 0);
+		});
 	}
 
 }
