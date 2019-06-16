@@ -7,17 +7,17 @@ import com.vas.desafioseniorcampanhas.enums.CampanhaAction;
 
 @SuppressWarnings("serial")
 public class CampanhaEvent extends ApplicationEvent {
-	private final CampanhaDTO message;
+	private final CampanhaDTO campanha;
 	private final CampanhaAction action;
 
 	public CampanhaEvent(Object source, CampanhaDTO message, CampanhaAction action) {
 		super(source);
-		this.message = message;
+		this.campanha = message;
 		this.action = action;
 	}
 
-	public CampanhaDTO getMessage() {
-		return message;
+	public CampanhaDTO getCampanha() {
+		return campanha;
 	}
 
 	public CampanhaAction getAction() {
