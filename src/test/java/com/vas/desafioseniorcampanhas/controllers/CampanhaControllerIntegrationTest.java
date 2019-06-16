@@ -5,8 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -166,7 +166,7 @@ public class CampanhaControllerIntegrationTest {
 		UpdateCampanhaCommand updateCampanhaCommand = new UpdateCampanhaCommand("24e235v4rwe",
 				"Teste2", null);
 
-		MvcResult result = mockMvc.perform(put("/campanhas/" + campanha.getId())
+		MvcResult result = mockMvc.perform(patch("/campanhas/" + campanha.getId())
 				.content(objectMapper.writeValueAsString(updateCampanhaCommand))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andReturn();
