@@ -2,8 +2,6 @@ package com.vas.desafioseniorcampanhas.dtos;
 
 import java.time.LocalDate;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -18,7 +16,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Document
 public class CampanhaDTO {
 	
 	private String id;
