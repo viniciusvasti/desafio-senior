@@ -20,10 +20,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,6 +36,7 @@ import com.vas.desafioseniorcampanhas.DesafioSeniorCampanhasApplication;
 import com.vas.desafioseniorcampanhas.commands.CreateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.commands.UpdateCampanhaCommand;
 import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
+import com.vas.desafioseniorcampanhas.events.CampanhaEventListener;
 import com.vas.desafioseniorcampanhas.models.Campanha;
 import com.vas.desafioseniorcampanhas.repositories.CampanhaRepository;
 
@@ -54,13 +54,13 @@ public class CampanhaControllerIntegrationTest {
 	private CampanhaRepository campanhaRepository;
 	@Autowired
 	protected ObjectMapper objectMapper;
-	@Autowired
-	private EmbeddedKafkaBroker embeddedKafkaBroker;
+
+	@MockBean
+	private CampanhaEventListener campanhaEventListener;
 
 	@Before
 	public void setup() throws Exception {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(this.campanhaController).build();
-		KafkaTestUtils.producerProps(embeddedKafkaBroker);
 	}
 
 	@Test
@@ -77,8 +77,12 @@ public class CampanhaControllerIntegrationTest {
 				.andExpect(jsonPath("$.nome").value(createCampanhaCommand.getNome()))
 				.andExpect(jsonPath("$.idTimeDoCoracao")
 						.value(createCampanhaCommand.getIdTimeDoCoracao()))
-				.andExpect(jsonPath("$.dataFimVigencia")
-						.value(createCampanhaCommand.getDataFimVigencia().toString()))
+				.andExpect(jsonPath("$.dataFimVigencia[0]")
+						.value(createCampanhaCommand.getDataFimVigencia().getYear()))
+				.andExpect(jsonPath("$.dataFimVigencia[1]")
+						.value(createCampanhaCommand.getDataFimVigencia().getMonthValue()))
+				.andExpect(jsonPath("$.dataFimVigencia[2]")
+						.value(createCampanhaCommand.getDataFimVigencia().getDayOfMonth()))
 				.andExpect(jsonPath("$.id").exists());
 
 		assertTrue(campanhaRepository.count() == 1);
@@ -102,8 +106,12 @@ public class CampanhaControllerIntegrationTest {
 				.andExpect(jsonPath("$.nome").value(createCampanhaCommand.getNome()))
 				.andExpect(jsonPath("$.idTimeDoCoracao")
 						.value(createCampanhaCommand.getIdTimeDoCoracao()))
-				.andExpect(jsonPath("$.dataFimVigencia")
-						.value(createCampanhaCommand.getDataFimVigencia().toString()))
+				.andExpect(jsonPath("$.dataFimVigencia[0]")
+						.value(createCampanhaCommand.getDataFimVigencia().getYear()))
+				.andExpect(jsonPath("$.dataFimVigencia[1]")
+						.value(createCampanhaCommand.getDataFimVigencia().getMonthValue()))
+				.andExpect(jsonPath("$.dataFimVigencia[2]")
+						.value(createCampanhaCommand.getDataFimVigencia().getDayOfMonth()))
 				.andExpect(jsonPath("$.id").exists());
 
 		assertEquals(campanhaRepository.findById(campanha1.getId()).get().getDataFimVigencia(),
@@ -130,8 +138,12 @@ public class CampanhaControllerIntegrationTest {
 				.andExpect(jsonPath("$.nome").value(createCampanhaCommand.getNome()))
 				.andExpect(jsonPath("$.idTimeDoCoracao")
 						.value(createCampanhaCommand.getIdTimeDoCoracao()))
-				.andExpect(jsonPath("$.dataFimVigencia")
-						.value(createCampanhaCommand.getDataFimVigencia().toString()))
+				.andExpect(jsonPath("$.dataFimVigencia[0]")
+						.value(createCampanhaCommand.getDataFimVigencia().getYear()))
+				.andExpect(jsonPath("$.dataFimVigencia[1]")
+						.value(createCampanhaCommand.getDataFimVigencia().getMonthValue()))
+				.andExpect(jsonPath("$.dataFimVigencia[2]")
+						.value(createCampanhaCommand.getDataFimVigencia().getDayOfMonth()))
 				.andExpect(jsonPath("$.id").exists());
 
 		assertEquals(campanhaRepository.findById(campanha1.getId()).get().getDataFimVigencia(),

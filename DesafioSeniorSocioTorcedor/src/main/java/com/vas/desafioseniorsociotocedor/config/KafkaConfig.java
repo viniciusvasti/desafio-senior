@@ -31,6 +31,8 @@ public class KafkaConfig {
 		config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 		config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+		config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+		config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
 		config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 		return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
 				new JsonDeserializer<>(Object.class));

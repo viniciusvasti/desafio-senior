@@ -24,13 +24,15 @@ public class CampanhaService {
 	}
 
 	public void update(CampanhaDTO campanhaDTO) {
-		Campanha campanha = repository.save(mapCampanhaDTOToCampanha(campanhaDTO));
+		repository.save(mapCampanhaDTOToCampanha(campanhaDTO));
 	}
 
 	public void delete(CampanhaDTO campanhaDTO) {
-		Campanha campanha = repository.findById(campanhaDTO.getId()).get();
-		repository.deleteById(campanha.getId());
-		socioTorcedorService.disassociateCampanhaByIdTimeDoCoracao(campanha);
+		Campanha campanha = repository.findById(campanhaDTO.getId()).orElse(null);
+		if (campanha != null) {
+			repository.deleteById(campanha.getId());
+			socioTorcedorService.disassociateCampanhaByIdTimeDoCoracao(campanha);
+		}
 	}
 
 	private static Campanha mapCampanhaDTOToCampanha(CampanhaDTO command) {

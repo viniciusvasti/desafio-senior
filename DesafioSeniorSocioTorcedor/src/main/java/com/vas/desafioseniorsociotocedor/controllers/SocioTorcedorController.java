@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/socio-torcedor")
+@RequestMapping("/socios-torcedores")
 public class SocioTorcedorController {
 
 	@Autowired

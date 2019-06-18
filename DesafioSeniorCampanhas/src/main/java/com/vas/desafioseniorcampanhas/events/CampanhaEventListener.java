@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vas.desafioseniorcampanhas.exceptions.KafkaProducerCampanhaException;
 
 @Component
 public class CampanhaEventListener implements ApplicationListener<CampanhaEvent> {
@@ -37,7 +38,7 @@ public class CampanhaEventListener implements ApplicationListener<CampanhaEvent>
 					.build();
 			kafkaTemplate.send(message).get();
 		} catch (TimeoutException | InterruptedException | ExecutionException ex) {
-			throw new RuntimeException("Kafka timeout");
+			throw new KafkaProducerCampanhaException("Kafka timeout");
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException("Kafka json deserialize error");
 		}

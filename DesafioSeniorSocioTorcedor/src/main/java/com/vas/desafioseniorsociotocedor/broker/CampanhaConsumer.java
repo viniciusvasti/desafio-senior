@@ -25,6 +25,7 @@ public class CampanhaConsumer {
 	@KafkaListener(topics = "${spring.kafka.topic.campanha}", groupId = "${spring.kafka.groupid.campanha}")
 	public void consume(@Payload String campanhaAsString, @Headers MessageHeaders headers) {
 		try {
+			System.out.println(campanhaAsString);
 			CampanhaDTO campanhaDTO = mapper.readValue(campanhaAsString, CampanhaDTO.class);
 			CampanhaAction action = CampanhaAction.valueOf(headers.get("action").toString());
 			if (action == CampanhaAction.CREATED) {

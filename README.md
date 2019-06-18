@@ -1,14 +1,33 @@
+### Endpoints:
+- Campanhas
+  - Cadastrar: `POST` em `/campanhas` com body no formato  
+`JSON { "nome": "string", "dataFimVigencia": "yyyy-mm-dd", "idTimeDoCoracao"  }`
+  - Alterar: `PATCH` em `/campanhas/{id}` com body no formato  
+`JSON { "nome": "string", "dataFimVigencia": "yyyy-mm-dd", "idTimeDoCoracao"  }`
+  - Excluir `DELETE` em `/campanhas/{id}`
+  - Recuperar vigentes `GET` em `/campanhas`
+- Sócio Torcedor
+  - Cadastrar: `POST` em `/socios-torcedores` com body no formato  
+`JSON { "email": "string", "nome": "string", "dataNascimento": "yyyy-mm-dd", "idTimeDoCoracao"  }`
+  - Recuperar todos `GET` em `/socios-torcedores`
+
 ### Negócio
-#### Não ficou claro se o ID da campanha não pode ser retornado.  
+- Não ficou claro se o ID da campanha não pode ser retornado.  
 Já que existe possibilidade de alterar uma campanha, estou retornando o ID no GET
 
 ### Persistência
-#### Utilizei um MongoDB "embedded" no serviço
+- Utilizei duas instâncias de MongoDB cujas portas podem ser verificadas em `src/main/resources/application.properties` de cada projeto
+
+### Kafka
+- Sub uma instância na minha máquina local cuja porta pode ser verificada em em `src/main/resources/application.properties` de um dos projetos
+
+### Execução
 
 ### Padrões de Desenvolvimento
-#### Apliquei TDD
-#### Dividi a aplicação em trÊs camadas: Apresentação (Controllers que expõem os endpoins REST), Service (regras de negócio, entidades de domínio/models e eventos) e Infra (repositories que acessam/persistem os dados)
-#### Devido a falta de tempo, para API do Socio Torcedor deixei de lado alguns padrões/práticas,  
+- TDD
+-  Dividi a aplicação em três camadas: Apresentação (Controllers que expõem os endpoins REST), Service (regras de negócio, entidades de domínio/models e eventos) e Infra (repositories que acessam/persistem os dados)
+
+### Devido a falta de tempo, para API do Socio Torcedor deixei de lado alguns padrões/práticas,  
 que adotei na API das Campanhas:
 - Testes de unidade (implementei, seguindo o TDD, apenas os testes de integração)
 - Utilização de POJO's command para segregar objetos recebidos da camada de apresentação
