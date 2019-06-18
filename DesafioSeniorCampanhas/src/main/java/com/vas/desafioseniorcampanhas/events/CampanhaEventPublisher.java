@@ -8,7 +8,7 @@ import com.vas.desafioseniorcampanhas.dtos.CampanhaDTO;
 import com.vas.desafioseniorcampanhas.enums.CampanhaAction;
 
 @Component
-public class CampanhaCreatedEventPublisher {
+public class CampanhaEventPublisher {
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
 

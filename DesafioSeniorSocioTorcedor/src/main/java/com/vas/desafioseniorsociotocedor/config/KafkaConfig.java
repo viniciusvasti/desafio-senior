@@ -14,8 +14,6 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.vas.desafioseniorsociotocedor.dtos.CampanhaEventDTO;
-
 @EnableKafka
 @Configuration
 public class KafkaConfig {
@@ -27,20 +25,20 @@ public class KafkaConfig {
 	private String groupId;
 
 	@Bean
-	public ConsumerFactory<String, CampanhaEventDTO> consumerFactory() {
+	public ConsumerFactory<String, String> consumerFactory() {
 		Map<String, Object> config = new HashMap<>();
 		config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl + ":" + kafkaPort);
 		config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 		config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-		// config.put(JsonDeserializer.TRUSTED_PACKAGES,"com.vas.desafioseniorcampanhas.events");
+		config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 		return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
-				new JsonDeserializer<>(CampanhaEventDTO.class));
+				new JsonDeserializer<>(Object.class));
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, CampanhaEventDTO> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, CampanhaEventDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+	public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
 		return factory;
 	}

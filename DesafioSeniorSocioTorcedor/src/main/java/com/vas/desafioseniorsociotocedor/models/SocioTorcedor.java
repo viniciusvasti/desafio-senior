@@ -3,6 +3,8 @@ package com.vas.desafioseniorsociotocedor.models;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,6 +21,7 @@ import lombok.Setter;
 @Setter
 public class SocioTorcedor {
 	@Id
+	@Email
 	private String email;
 	private String nome;
 	private LocalDate dataNascimento;

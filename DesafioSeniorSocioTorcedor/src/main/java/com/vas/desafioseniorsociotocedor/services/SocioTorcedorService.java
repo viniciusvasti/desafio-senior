@@ -1,4 +1,4 @@
-package com.vas.desafioseniorsociotocedor;
+package com.vas.desafioseniorsociotocedor.services;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,6 +45,24 @@ public class SocioTorcedorService {
 
 	public List<SocioTorcedor> findAll() {
 		return repository.findAll();
+	}
+
+	public void disassociateCampanhaByIdTimeDoCoracao(Campanha campanha) {
+		List<SocioTorcedor> sociosTorcedores = repository
+				.findByIdTimeDoCoracao(campanha.getIdTimeDoCoracao());
+		sociosTorcedores.forEach(st -> {
+			st.getCampanhas().remove(campanha);
+			repository.save(st);
+		});
+	}
+
+	public void associateCampanhaByIdTimeDoCoracao(Campanha campanha) {
+		List<SocioTorcedor> sociosTorcedores = repository
+				.findByIdTimeDoCoracao(campanha.getIdTimeDoCoracao());
+		sociosTorcedores.forEach(st -> {
+			st.getCampanhas().add(campanha);
+			repository.save(st);
+		});
 	}
 
 }

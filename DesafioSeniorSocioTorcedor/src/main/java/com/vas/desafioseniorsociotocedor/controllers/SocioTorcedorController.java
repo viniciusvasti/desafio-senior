@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.vas.desafioseniorsociotocedor.SocioTorcedorService;
 import com.vas.desafioseniorsociotocedor.models.SocioTorcedor;
+import com.vas.desafioseniorsociotocedor.services.SocioTorcedorService;
 
 import lombok.AllArgsConstructor;
 
@@ -34,7 +34,7 @@ public class SocioTorcedorController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<SocioTorcedor>> getVigentes() {
+	public ResponseEntity<List<SocioTorcedor>> getAll() {
 		return ResponseEntity.ok(service.findAll());
 	}
 

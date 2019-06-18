@@ -9,26 +9,37 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.event.ListenerContainerIdleEvent;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Component
-public class CampanhaCreatedEventListener implements ApplicationListener<CampanhaEvent> {
+public class CampanhaEventListener implements ApplicationListener<CampanhaEvent> {
 
 	@Value(value = "${spring.kafka.topic.campanha}")
 	private String topic;
 	@Autowired
-	private KafkaTemplate<String, CampanhaEvent> kafkaTemplate;
+	private KafkaTemplate<String, String> kafkaTemplate;
+	@Autowired
+	private ObjectMapper mapper;
 
 	@Override
 	public void onApplicationEvent(CampanhaEvent event) {
-		String message = "Received CampanhaEvent - " + event.getAction().toString() + ": "
-				+ event.getCampanha();
-		System.out.println(message);
-		// TODO handle kafka unavailable
 		try {
-			kafkaTemplate.send(topic, event).get();
+			Message<String> message = MessageBuilder
+					.withPayload(mapper.writeValueAsString(event.getCampanha()))
+					.setHeader(KafkaHeaders.TOPIC, topic)
+					.setHeader("action", event.getAction().toString())
+					.build();
+			kafkaTemplate.send(message).get();
 		} catch (TimeoutException | InterruptedException | ExecutionException ex) {
 			throw new RuntimeException("Kafka timeout");
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException("Kafka json deserialize error");
 		}
 	}
 

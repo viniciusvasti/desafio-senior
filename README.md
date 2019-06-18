@@ -14,13 +14,12 @@ que adotei na API das Campanhas:
 - Utilização de POJO's command para segregar objetos recebidos da camada de apresentação
 
 ### Melhorias (Há algumas melhorias que tenho em mente mas o tempo está limitado)
-#### Definir uma camada de Application entre a camada de Apresentação (Controllers) e a de Serviços de Domínio (Service)  
+- Definir uma camada de Application entre a camada de Apresentação (Controllers) e a de Serviços de Domínio (Service)  
 Nessa camada seriam feitas as conversões de entidades de domínio para DTO's e virce-versa, retirando essa responsabilidade da camada de domínio.
+- No projeto do Sócio Torcedor, CampanhaService está em acoplamento com SocioTorcedorService. Eu disparia eventos relacionados a
+operações sobre as Campanhas e esse eventos cuidariam de executar o que for necessário em relação aos Sócios Torcedores
+- O item acima também vale para o SocioTorcedorService que está em acomplamento com CampanhaRepository. Essas duas alterações atenderiam ao princípio da responsabilidade única
 
 ### Problemas conhecidos
 #### Ás vezes algum teste falha com IOException. Provavelmente perda de conexão com o embedded mongo.
 #### O Serviço do Sócio Torcedor pára a execução se não houver comunicação com o Kafka
-#### A regra de negócio `Dado um E-mail que já existe, informar que o cadastro já foi efetuado, porém, caso o cliente
-não tenha nenhuma campanha associada, o serviço deverá enviar as novas campanhas como
-resposta` não foi aplicada porque não sei se compreendi bem, mas achei conflitante com outra regra que diz que quando novas campanhas são cadastradas, os torcedores que estiverem associados ao time do coração das novas campanhas, devem ser associados a essas campanhas, automaticamente. Logo, exceto por questões de indisponibilidade de algum serviço, a regra geral é que os Sócio Torcedores sempre estarão associados
-às campanhas vigentes do seu time do coração 
