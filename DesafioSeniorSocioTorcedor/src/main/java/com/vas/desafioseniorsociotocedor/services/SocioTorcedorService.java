@@ -47,15 +47,6 @@ public class SocioTorcedorService {
 		return repository.findAll();
 	}
 
-	public void disassociateCampanhaByIdTimeDoCoracao(Campanha campanha) {
-		List<SocioTorcedor> sociosTorcedores = repository
-				.findByIdTimeDoCoracao(campanha.getIdTimeDoCoracao());
-		sociosTorcedores.forEach(st -> {
-			st.getCampanhas().remove(campanha);
-			repository.save(st);
-		});
-	}
-
 	public void associateCampanhaByIdTimeDoCoracao(Campanha campanha) {
 		List<SocioTorcedor> sociosTorcedores = repository
 				.findByIdTimeDoCoracao(campanha.getIdTimeDoCoracao());

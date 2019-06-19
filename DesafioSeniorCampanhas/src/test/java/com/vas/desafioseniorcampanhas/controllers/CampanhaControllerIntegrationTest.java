@@ -53,7 +53,7 @@ public class CampanhaControllerIntegrationTest {
 	@Autowired
 	private CampanhaRepository campanhaRepository;
 	@Autowired
-	protected ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 
 	@MockBean
 	private CampanhaEventListener campanhaEventListener;

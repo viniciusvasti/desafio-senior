@@ -31,7 +31,6 @@ public class CampanhaService {
 		Campanha campanha = repository.findById(campanhaDTO.getId()).orElse(null);
 		if (campanha != null) {
 			repository.deleteById(campanha.getId());
-			socioTorcedorService.disassociateCampanhaByIdTimeDoCoracao(campanha);
 		}
 	}
 

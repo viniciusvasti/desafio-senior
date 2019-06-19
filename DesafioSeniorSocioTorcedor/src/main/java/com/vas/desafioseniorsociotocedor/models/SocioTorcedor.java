@@ -1,6 +1,7 @@
 package com.vas.desafioseniorsociotocedor.models;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
@@ -28,4 +29,19 @@ public class SocioTorcedor {
 	private long idTimeDoCoracao;
 	@DBRef
 	private Set<Campanha> campanhas;
+
+	public SocioTorcedor(@Email String email, String nome, LocalDate dataNascimento,
+			long idTimeDoCoracao) {
+		super();
+		this.email = email;
+		this.nome = nome;
+		this.dataNascimento = dataNascimento;
+		this.idTimeDoCoracao = idTimeDoCoracao;
+	}
+
+	public Set<Campanha> getCampanhas() {
+		if (campanhas == null)
+			campanhas = new HashSet<>();
+		return campanhas;
+	}
 }
