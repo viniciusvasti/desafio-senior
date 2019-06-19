@@ -1,4 +1,5 @@
 ### Executando:
+- Iniciar Kafka conforme [documentação oficial](https://kafka.apache.org/quickstart)
 - Startando mongodb para serviço de campanhas `sudo docker run -p 27017:27017 -d --name mongocampanhas mongo`
 - Startando mongodb para serviço de sócios torcedores `sudo docker run -p 27018:27017 -d --name mongosociotorcedor mongo`
 - Startando serviço de campanhas:
@@ -26,14 +27,16 @@ Já que existe possibilidade de alterar uma campanha, estou retornando o ID no G
 - Utilizei duas instâncias de MongoDB cujas portas podem ser verificadas em `src/main/resources/application.properties` de cada projeto
 
 ### Kafka
-- Sub uma instância na minha máquina local cuja porta pode ser verificada em em `src/main/resources/application.properties` de um dos projetos
+- Subi uma instância na minha máquina local cuja porta pode ser verificada em em `src/main/resources/application.properties` de um dos projetos
 - Não implementei testes automatizados para o Kafka
 
 ### Execução
 
-### Padrões de Desenvolvimento
-- TDD
--  Dividi a aplicação em três camadas: Apresentação (Controllers que expõem os endpoins REST), Service (regras de negócio, entidades de domínio/models e eventos) e Infra (repositories que acessam/persistem os dados)
+### Padrões de Desenvolvimento e Arquitetura
+- TDD;
+- Dividi a aplicação em três camadas: Apresentação (Controllers que expõem os endpoins REST), Service (regras de negócio, entidades de domínio/models e eventos) e Infra (repositories que acessam/persistem os dados);
+- Implementei dois microserviços: um para CRUD das campanhas e outro para cadastro de cliente;
+- Implementei mensageria com Kafka, assim o serviço de campanhas produz mensagens informando cada alteração numa campanha e o serviço de cliente/sócio torcedor tem um consumer que consome essas mensagens e executa o que for necessário com elas.
 
 ### Devido a falta de tempo, para API do Socio Torcedor deixei de lado alguns padrões/práticas,  
 que adotei na API das Campanhas:
@@ -48,5 +51,4 @@ operações sobre as Campanhas e esse eventos cuidariam de executar o que for ne
 - O item acima também vale para o SocioTorcedorService que está em acomplamento com CampanhaRepository. Essas duas alterações atenderiam ao princípio da responsabilidade única
 
 ### Problemas conhecidos
-#### Ás vezes algum teste falha com IOException. Provavelmente perda de conexão com o embedded mongo.
-#### O Serviço do Sócio Torcedor pára a execução se não houver comunicação com o Kafka
+- O Serviço do Sócio Torcedor não inicia se não houver comunicação com o Kafka
