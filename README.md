@@ -30,8 +30,6 @@ Já que existe possibilidade de alterar uma campanha, estou retornando o ID no G
 - Subi uma instância na minha máquina local cuja porta pode ser verificada em em `src/main/resources/application.properties` de um dos projetos
 - Não implementei testes automatizados para o Kafka
 
-### Execução
-
 ### Padrões de Desenvolvimento e Arquitetura
 - TDD;
 - Dividi a aplicação em três camadas: Apresentação (Controllers que expõem os endpoins REST), Service (regras de negócio, entidades de domínio/models e eventos) e Infra (repositories que acessam/persistem os dados);
