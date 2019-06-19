@@ -1,3 +1,10 @@
+### Executando:
+- Startando mongodb para serviço de campanhas `sudo docker run -p 27017:27017 -d --name mongocampanhas mongo`
+- Startando mongodb para serviço de sócios torcedores `sudo docker run -p 27018:27017 -d --name mongosociotorcedor mongo`
+- Startando serviço de campanhas:
+  - A partir do Diretório DesafioSeniorCampanhas/DesafioSeniorCampanhas execute no cmd/terminal: `mvn spring-boot:run`
+  - A partir do Diretório DesafioSeniorCampanhas/DesafioSeniorSocioTorcedor execute no cmd/terminal: `mvn spring-boot:run`
+
 ### Endpoints:
 - Campanhas
   - Cadastrar: `POST` em `/campanhas` com body no formato  
