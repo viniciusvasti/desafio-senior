@@ -1,7 +1,7 @@
 ### Executando:
 - Iniciar Kafka conforme [documentação oficial](https://kafka.apache.org/quickstart)
-- Startando mongodb para serviço de campanhas `sudo docker run -p 27017:27017 -d --name mongocampanhas mongo`
-- Startando mongodb para serviço de sócios torcedores `sudo docker run -p 27018:27017 -d --name mongosociotorcedor mongo`
+- Startando mongodb para serviço de campanhas `sudo docker run -p 27017:27017 -d --name mongocampanhas mongo` ou, caso já tenha rodado o container `sudo docker start mongocampanhas`
+- Startando mongodb para serviço de sócios torcedores `sudo docker run -p 27018:27017 -d --name mongosociotorcedor mongo` ou, caso já tenha rodado o container `sudo docker start mongosociotorcedor`
 - Startando serviço de campanhas:
   - A partir do Diretório DesafioSeniorCampanhas/DesafioSeniorCampanhas execute no cmd/terminal: `mvn spring-boot:run`
   - A partir do Diretório DesafioSeniorCampanhas/DesafioSeniorSocioTorcedor execute no cmd/terminal: `mvn spring-boot:run`
@@ -13,7 +13,8 @@
   - Alterar: `PATCH` em `/campanhas/{id}` com body no formato  
 `JSON { "nome": "string", "dataFimVigencia": "yyyy-mm-dd", "idTimeDoCoracao"  }`
   - Excluir `DELETE` em `/campanhas/{id}`
-  - Recuperar vigentes `GET` em `/campanhas`
+  - Recuperar Todas as Campanhas `GET` em `/campanhas`
+  - Recuperar vigentes `GET` em `/campanhas/vigentes`
 - Sócio Torcedor
   - Cadastrar: `POST` em `/socios-torcedores` com body no formato  
 `JSON { "email": "string", "nome": "string", "dataNascimento": "yyyy-mm-dd", "idTimeDoCoracao"  }`
@@ -39,7 +40,6 @@ Já que existe possibilidade de alterar uma campanha, estou retornando o ID no G
 ### Devido a falta de tempo, para API do Socio Torcedor deixei de lado alguns padrões/práticas,  
 que adotei na API das Campanhas:
 - Testes de unidade (implementei, seguindo o TDD, apenas os testes de integração)
-- Utilização de POJO's command para segregar objetos recebidos da camada de apresentação
 
 ### Melhorias (Há algumas melhorias que tenho em mente mas o tempo está limitado)
 - Definir uma camada de Application entre a camada de Apresentação (Controllers) e a de Serviços de Domínio (Service)  
