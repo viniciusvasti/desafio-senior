@@ -52,6 +52,7 @@ que adotei na API das Campanhas:
 - Testes de unidade (implementei, seguindo o TDD, apenas os testes de integração)
 
 ### Melhorias (Há algumas melhorias que tenho em mente mas o tempo está limitado)
+- Composição com docker-compose para cada microserviço com seu banco da dados Mongo (o foco foi na arquitetura)
 - Definir uma camada de Application entre a camada de Apresentação (Controllers) e a de Serviços de Domínio (Service)  
 Nessa camada seriam feitas as conversões de entidades de domínio para DTO's e virce-versa, retirando essa responsabilidade da camada de domínio.
 - No projeto do Sócio Torcedor, CampanhaService está em acoplamento com SocioTorcedorService. Eu disparia eventos relacionados a
