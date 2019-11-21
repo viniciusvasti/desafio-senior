@@ -16,7 +16,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
-public class KafkaConfig {
+public class KafkaProducerConfig {
 	@Value(value = "${spring.kafka.url}")
 	private String kafkaUrl;
 	@Value(value = "${spring.kafka.port}")

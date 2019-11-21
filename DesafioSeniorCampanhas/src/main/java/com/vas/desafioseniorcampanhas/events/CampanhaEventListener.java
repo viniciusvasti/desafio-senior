@@ -21,7 +21,7 @@ import com.vas.desafioseniorcampanhas.exceptions.KafkaProducerCampanhaException;
 @Component
 public class CampanhaEventListener implements ApplicationListener<CampanhaEvent> {
 
-	@Value(value = "${spring.kafka.topic.campanha}")
+	@Value(value = "${spring.kafka.topics.campanha}")
 	private String topic;
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
