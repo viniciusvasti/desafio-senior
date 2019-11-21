@@ -95,7 +95,7 @@ public class CampanhaServiceUnitTest {
 	}
 
 	@Test
-	public void findAllVigentes_shouldReturnOnlyVigentes() {
+	public void findAll_shouldReturnAllCampanhas() {
 		List<Campanha> campanhas = new ArrayList<>();
 		campanhas.add(new Campanha("24e235v4rwe", "Teste1", 1, LocalDate.now().plusDays(30)));
 		campanhas.add(new Campanha("fsvrwrwe", "Teste2", 2, LocalDate.now().plusDays(1)));
@@ -106,6 +106,19 @@ public class CampanhaServiceUnitTest {
 
 		List<CampanhaDTO> campanhaDTOs = campanhaService.findAllVigentes();
 		assertEquals(3, campanhaDTOs.size());
+	}
+
+	@Test
+	public void findAllVigentes_shouldReturnOnlyVigentes() {
+		List<Campanha> campanhas = new ArrayList<>();
+		campanhas.add(new Campanha("24e235v4rwe", "Teste1", 1, LocalDate.now().plusDays(30)));
+		campanhas.add(new Campanha("fsvrwrwe", "Teste2", 2, LocalDate.now().plusDays(1)));
+
+		when(campanhaRepository.findByDataFimVigenciaGreaterThanEqual(any(LocalDate.class)))
+				.thenReturn(campanhas);
+
+		List<CampanhaDTO> campanhaDTOs = campanhaService.findAllVigentes();
+		assertEquals(2, campanhaDTOs.size());
 	}
 
 	@Test

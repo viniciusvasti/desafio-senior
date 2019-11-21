@@ -108,4 +108,11 @@ public class CampanhaService {
 		return updatedCampanha;
 	}
 
+	public List<CampanhaDTO> findAll() {
+		List<CampanhaDTO> campanhaDTOs = new ArrayList<>();
+		List<Campanha> campanhaVigentes = campanhaRepository.findAll();
+		campanhaVigentes.forEach(campanha -> campanhaDTOs.add(mapCampanhaToCampanhaDTO(campanha)));
+		return campanhaDTOs;
+	}
+
 }

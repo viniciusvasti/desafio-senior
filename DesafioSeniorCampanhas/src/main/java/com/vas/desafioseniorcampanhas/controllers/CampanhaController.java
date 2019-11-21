@@ -37,6 +37,11 @@ public class CampanhaController {
 	}
 
 	@GetMapping
+	public ResponseEntity<List<CampanhaDTO>> getAll() {
+		return ResponseEntity.ok(campanhaService.findAll());
+	}
+
+	@GetMapping("/vigentes")
 	public ResponseEntity<List<CampanhaDTO>> getVigentes() {
 		return ResponseEntity.ok(campanhaService.findAllVigentes());
 	}

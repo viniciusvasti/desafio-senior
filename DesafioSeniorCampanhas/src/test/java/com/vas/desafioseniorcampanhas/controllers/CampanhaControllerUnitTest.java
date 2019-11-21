@@ -89,6 +89,29 @@ public class CampanhaControllerUnitTest {
 	}
 
 	@Test
+	public void get_campanhas_shouldReturnOkAndCampanhasJsonArray() throws Exception {
+		List<CampanhaDTO> campanhas = new ArrayList<>();
+		campanhas.add(new CampanhaDTO("24e235v4rwe", "Teste1", 1, LocalDate.now().plusDays(30)));
+		campanhas.add(new CampanhaDTO("fsvrwrwe", "Teste2", 2, LocalDate.now().plusDays(20)));
+		campanhas.add(new CampanhaDTO("wb534tb4", "Teste3", 1, LocalDate.now().plusDays(35)));
+		campanhas.add(new CampanhaDTO("vvrwrv", "Teste4", 3, LocalDate.now().plusDays(22)));
+
+		when(campanhaService.findAll()).thenReturn(campanhas);
+
+		MvcResult result = mockMvc.perform(get("/campanhas")).andExpect(status().isOk())
+				.andReturn();
+		List<CampanhaDTO> campanhasResponse = objectMapper
+				.readValue(result.getResponse().getContentAsString(),
+						new TypeReference<List<CampanhaDTO>>() {
+						});
+		assertEquals(campanhas.size(), campanhasResponse.size());
+		assertEquals(campanhas.get(0).getNome(), campanhasResponse.get(0).getNome());
+		assertEquals(campanhas.get(1).getNome(), campanhasResponse.get(1).getNome());
+		assertEquals(campanhas.get(2).getNome(), campanhasResponse.get(2).getNome());
+		assertEquals(campanhas.get(3).getNome(), campanhasResponse.get(3).getNome());
+	}
+
+	@Test
 	public void getVigentes_campanhas_shouldReturnOkAndCampanhasJsonArray() throws Exception {
 		List<CampanhaDTO> campanhas = new ArrayList<>();
 		campanhas.add(new CampanhaDTO("24e235v4rwe", "Teste1", 1, LocalDate.now().plusDays(30)));
@@ -98,7 +121,7 @@ public class CampanhaControllerUnitTest {
 
 		when(campanhaService.findAllVigentes()).thenReturn(campanhas);
 
-		MvcResult result = mockMvc.perform(get("/campanhas")).andExpect(status().isOk())
+		MvcResult result = mockMvc.perform(get("/campanhas/vigentes")).andExpect(status().isOk())
 				.andReturn();
 		List<CampanhaDTO> campanhasResponse = objectMapper
 				.readValue(result.getResponse().getContentAsString(),

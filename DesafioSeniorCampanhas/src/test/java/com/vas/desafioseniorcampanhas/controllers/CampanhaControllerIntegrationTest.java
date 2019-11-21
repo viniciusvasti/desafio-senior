@@ -163,7 +163,7 @@ public class CampanhaControllerIntegrationTest {
 		campanhas.add(new Campanha(null, "Teste5", 3, LocalDate.now().plusDays(1)));
 		campanhaRepository.saveAll(campanhas);
 
-		MvcResult result = mockMvc.perform(get("/campanhas")).andExpect(status().isOk())
+		MvcResult result = mockMvc.perform(get("/campanhas/vigentes")).andExpect(status().isOk())
 				.andReturn();
 		List<CampanhaDTO> campanhasResponse = objectMapper
 				.readValue(result.getResponse().getContentAsString(),

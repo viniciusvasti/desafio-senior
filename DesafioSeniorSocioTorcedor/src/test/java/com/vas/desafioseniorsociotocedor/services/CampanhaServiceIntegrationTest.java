@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.vas.desafioseniorsociotocedor.DesafioSeniorSocioTorcedorApplication;
-import com.vas.desafioseniorsociotocedor.broker.CampanhaConsumer;
+import com.vas.desafioseniorsociotocedor.consumers.CampanhaConsumer;
 import com.vas.desafioseniorsociotocedor.dtos.CampanhaDTO;
 import com.vas.desafioseniorsociotocedor.models.SocioTorcedor;
 import com.vas.desafioseniorsociotocedor.repositories.CampanhaRepository;
