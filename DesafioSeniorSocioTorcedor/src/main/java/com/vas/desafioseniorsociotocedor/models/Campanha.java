@@ -15,8 +15,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Campanha {
-	
+public class Campanha extends RetryableMessage {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	private String id;
 	private String nome;

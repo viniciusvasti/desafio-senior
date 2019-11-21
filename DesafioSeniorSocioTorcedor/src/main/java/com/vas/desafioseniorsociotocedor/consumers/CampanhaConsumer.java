@@ -1,7 +1,9 @@
-package com.vas.desafioseniorsociotocedor.broker;
+package com.vas.desafioseniorsociotocedor.consumers;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.MessageHeaders;
@@ -16,16 +18,17 @@ import com.vas.desafioseniorsociotocedor.services.CampanhaService;
 
 @Service
 public class CampanhaConsumer {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CampanhaConsumer.class);
 
 	@Autowired
 	private CampanhaService campanhaService;
 	@Autowired
 	private ObjectMapper mapper;
 
-	@KafkaListener(topics = "${spring.kafka.topic.campanha}", groupId = "${spring.kafka.groupid.campanha}")
+	@KafkaListener(topics = "${spring.kafka.topics.campanha}", groupId = "${spring.kafka.groupid.campanha}", clientIdPrefix = "${spring.kafka.topics.campanha}", containerFactory = "campanhasContainerFactory")
 	public void consume(@Payload String campanhaAsString, @Headers MessageHeaders headers) {
+		LOGGER.info("CampanhaConsumer Consuming: {}", campanhaAsString);
 		try {
-			System.out.println(campanhaAsString);
 			CampanhaDTO campanhaDTO = mapper.readValue(campanhaAsString, CampanhaDTO.class);
 			CampanhaAction action = CampanhaAction.valueOf(headers.get("action").toString());
 			if (action == CampanhaAction.CREATED) {

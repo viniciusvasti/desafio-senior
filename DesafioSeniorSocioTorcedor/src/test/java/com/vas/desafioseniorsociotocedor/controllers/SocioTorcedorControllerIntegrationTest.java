@@ -30,7 +30,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vas.desafioseniorsociotocedor.DesafioSeniorSocioTorcedorApplication;
-import com.vas.desafioseniorsociotocedor.broker.CampanhaConsumer;
+import com.vas.desafioseniorsociotocedor.consumers.CampanhaConsumer;
 import com.vas.desafioseniorsociotocedor.models.SocioTorcedor;
 import com.vas.desafioseniorsociotocedor.repositories.SocioTorcedorRepository;
 
