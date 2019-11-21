@@ -36,6 +36,16 @@ Já que existe possibilidade de alterar uma campanha, estou retornando o ID no G
 - Dividi a aplicação em três camadas: Apresentação (Controllers que expõem os endpoins REST), Service (regras de negócio, entidades de domínio/models e eventos) e Infra (repositories que acessam/persistem os dados);
 - Implementei dois microserviços: um para CRUD das campanhas e outro para cadastro de cliente;
 - Implementei mensageria com Kafka, assim o serviço de campanhas produz mensagens informando cada alteração numa campanha e o serviço de cliente/sócio torcedor tem um consumer que consome essas mensagens e executa o que for necessário com elas.
+- Fluxo de Cadastro/Alteração/Exclusão de Campanha (MS de Campanha)
+  1. Controller recebe requisição REST;
+  2. Service executa comando relativo a campanha invocando o Repository e dispara um Evento de cadastro/alteração/exlusão de campanha;
+  3. Um Listener captura o evento e dispara producer com a mensagem e a ação efetuada para o Kafka.
+- Fluxo de Cadastro/Alteração/Exclusão de Campanha (MS de Sócio Torcedor)
+  1. Consumer recebe mensagem de nova campanha via Kafka e invoca o Service com a ação correspondente ao comando;
+  2. Service executa ação em seu banco de dados com réplica da campanha invocando o Repository;
+  3. Caso a ação seja de cadastro de campanha, o Service varre todos os sócio torcedores associados ao mesmo código de Time da campanha e associa a campanha aos Sócios Torcedores do Time.
+- Desenho da Arquitetura proposta em um cenário real (Não o implementado nesse desafio)
+![Diagrama de Arquitetura](https://github.com/viniciusvasti/desafio-senior/blob/master/Arquitetura.jpg)
 
 ### Devido a falta de tempo, para API do Socio Torcedor deixei de lado alguns padrões/práticas,  
 que adotei na API das Campanhas:
@@ -50,3 +60,4 @@ operações sobre as Campanhas e esse eventos cuidariam de executar o que for ne
 
 ### Problemas conhecidos
 - O Serviço do Sócio Torcedor não inicia se não houver comunicação com o Kafka
+- No fluxo de retry, há um bug ao cair no tópico de retenção e tentar reenviar para o tópico principal, por tanto, provisoriamente, ao ocorre falha no consumo, não está sendo enviada a mensagem para o tópico de retenção, mas diretamente para o de erro.
