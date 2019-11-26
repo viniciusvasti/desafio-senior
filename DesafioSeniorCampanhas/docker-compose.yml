@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  springboot:
+    build: .
+    # image: registry.gitlab.com/idgst/springboot-mongo-demo:latest
+    restart: always
+    container_name: campanhas-microservice
+    ports:
+      - 8081:8081
+    working_dir: /opt/app
+    depends_on:
+      - mongo
+  
+  mongo:
+    image: mongo
+    container_name: mongocampanhas
+#    ports:  # for demo/debug purpose only
+#      - 27018:27017
+    volumes:
+      - $HOME/data/campanhas-microservice-data:/data/db
+      - $HOME/data/campanhas-microservice-bkp:/data/bkp
+    restart: always
