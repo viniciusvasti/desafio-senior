@@ -1,20 +1,19 @@
 ### Executando:
 - Iniciar Kafka conforme [documentação oficial](https://kafka.apache.org/quickstart)
-- Startando mongodb para serviço de campanhas `sudo docker run -p 27017:27017 -d --name mongocampanhas mongo` ou, caso já tenha rodado o container `sudo docker start mongocampanhas`
 - Startando mongodb para serviço de sócios torcedores `sudo docker run -p 27018:27017 -d --name mongosociotorcedor mongo` ou, caso já tenha rodado o container `sudo docker start mongosociotorcedor`
-- Startando serviço de campanhas:
-  - A partir do Diretório DesafioSeniorCampanhas/DesafioSeniorCampanhas execute no cmd/terminal: `mvn spring-boot:run`
+- Startando serviços:
+  - A partir do Diretório DesafioSeniorCampanhas/DesafioSeniorCampanhas execute no cmd/terminal: `docker-compose up -d`
   - A partir do Diretório DesafioSeniorCampanhas/DesafioSeniorSocioTorcedor execute no cmd/terminal: `mvn spring-boot:run`
 
 ### Endpoints:
 - Campanhas
-  - Cadastrar: `POST` em `/campanhas` com body no formato  
+  - Cadastrar: `POST` em `http://localhost:8081/campanhas` com body no formato  
 `JSON { "nome": "string", "dataFimVigencia": "yyyy-mm-dd", "idTimeDoCoracao"  }`
-  - Alterar: `PATCH` em `/campanhas/{id}` com body no formato  
+  - Alterar: `PATCH` em `http://localhost:8081/campanhas/{id}` com body no formato  
 `JSON { "nome": "string", "dataFimVigencia": "yyyy-mm-dd", "idTimeDoCoracao"  }`
-  - Excluir `DELETE` em `/campanhas/{id}`
+  - Excluir `DELETE` em `http://localhost:8081/campanhas/{id}`
   - Recuperar Todas as Campanhas `GET` em `/campanhas`
-  - Recuperar vigentes `GET` em `/campanhas/vigentes`
+  - Recuperar vigentes `GET` em `http://localhost:8081/campanhas/vigentes`
 - Sócio Torcedor
   - Cadastrar: `POST` em `/socios-torcedores` com body no formato  
 `JSON { "email": "string", "nome": "string", "dataNascimento": "yyyy-mm-dd", "idTimeDoCoracao"  }`
